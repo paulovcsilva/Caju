@@ -1,0 +1,57 @@
+name: dockercompose3352731166430169586
+services:
+  caju:
+    build:
+      context: C:\Users\Paulo\source\repos\Caju\Caju
+      dockerfile: Dockerfile
+    depends_on:
+      sqlcaju:
+        condition: service_started
+        required: true
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ASPNETCORE_HTTPS_PORTS: "8081"
+      ConnectionStrings__DefaultConnection: Server=sqlcaju,1433;Database=Caju;User Id=sa;Password=Paulo151964@;
+    image: caju
+    networks:
+      sql_network: null
+    ports:
+      - mode: ingress
+        target: 8080
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: C:\Users\Paulo\AppData\Roaming/Microsoft/UserSecrets
+        target: /home/app/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\Paulo\AppData\Roaming/ASP.NET/Https
+        target: /home/app/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+  sqlcaju:
+    container_name: sqlcaju
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Paulo151964@
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 1433
+        published: "1433"
+        protocol: tcp
+networks:
+  default:
+    name: dockercompose3352731166430169586_default
+  sql_network:
+    name: dockercompose3352731166430169586_sql_network
+    driver: bridge

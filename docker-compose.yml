@@ -1,0 +1,32 @@
+services:
+  caju:
+    image: ${DOCKER_REGISTRY-}caju
+    build:
+      context: Caju
+      dockerfile: Dockerfile
+    networks:
+      - sql_network
+    depends_on:
+      - sqlcaju
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sqlcaju;Database=Caju;User Id=sa;Password=Paulo151964@;MultipleActiveResultSets=true;TrustServerCertificate=True;
+    ports:
+      - "5050:8080"
+      - "5051:8081"
+  sqlcaju:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlcaju
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Paulo151964@
+    ports:
+      - "1433:1433"
+    networks:
+      - sql_network
+volumes:
+  sql_data:
+    driver: local
+
+networks:
+  sql_network:
+    driver: bridge
