@@ -68,3 +68,9 @@ Para rodar a aplicação dentro de um container Docker, siga os passos abaixo:
 - **Driven**: Contém Migrations, Configurações de Banco e Repositorios.
 - **Driver**: Contém Controller TransactionController
 
+- ## L4 
+
+Para essa questão existe o plano de usar Lock para travar uma segunda requisição, ate que a primeira seja concluida, destravando assim o Lock, o maior problema dessa abordagem é que ela pode ser demorada, dependendo do que está sendo feito e pela questão ela informa que é preciso fazer isso em 100ms, como o tempo de destravar e travar, depende muito da implementação, do sistema usado e da requisição. Para melhorar essa performance pode ser adicionado um timeout para a segunda requisição, ou seja, se ela tentar fazer uma transação e se a mesma ja está em uso, ela espera um tempo determinado ou pode abordar a transição.
+
+![Lock com Timeout (1)](https://github.com/user-attachments/assets/7fea637b-a4d5-49da-ab78-baf5bd3f9f90)
+
